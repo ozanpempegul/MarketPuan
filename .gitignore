@@ -6,7 +6,6 @@
 # User-specific files
 *.rsuser
 *.suo
-*.user
 *.userosscache
 *.sln.docstates
 
@@ -395,4 +394,63 @@ FodyWeavers.xsd
 *.msp
 
 # JetBrains Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.idea
+*.user
+*.userprefs
+
+# .NET and Visual Studio files
+.vscode/
+.vs/
+obj/
+bin/
+*.suo
+*.user
+*.userprefs
+*.vscode
+
+# Compiled files
+*.dll
+*.exe
+*.pdb
+*.cache
+
+# NuGet packages
+*.nuget.props
+*.nuget.targets
+
+# User-specific files
+*.DS_Store
+Thumbs.db
+
+# PostgreSQL database files
+*.pgdata
+*.pgbackups
+
+# Docker and Compose files
+docker-compose.yml
+Dockerfile
+docker-compose.override.yml
+.docker/
+
+# Log files
+*.log
+
+# Dependency directories
+node_modules/
+bower_components/
+packages/
+
+# User-specific files
+*.sln.iml
+*.idea
+*.suo
+*.user
+*.userprefs
+
+# Rider
+.idea/
 *.sln.iml
