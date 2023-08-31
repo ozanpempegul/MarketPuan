@@ -1,5 +1,6 @@
 ﻿using MarketPuan.Data;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore;
 
 namespace MarketPuan
 {
@@ -7,13 +8,21 @@ namespace MarketPuan
     {
         public IConfiguration Configuration { get; }
 
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             // Add services to the container.
             services.AddControllersWithViews();
 
+            var dbConfig = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseNpgsql(dbConfig);
+            });
 
         }
 
