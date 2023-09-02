@@ -1,162 +1,100 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MarketPuan.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using MarketPuan.Data;
 
 namespace MarketPuan.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IProductRepository _productRepository;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductController(IProductRepository productRepository)
         {
-            _context = context;
+            _productRepository = productRepository;
         }
 
-        // GET: Products
-        public async Task<IActionResult> Index()
+        [Route("products")]
+        public IActionResult Index()
         {
-              return _context.Products != null ? 
-                          View(await _context.Products.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Products'  is null.");
+            var products = _productRepository.GetProducts();
+            return View(products);
         }
 
-        // GET: Products/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [Route("products/{id}")]
+        public IActionResult Details(int id)
         {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = _productRepository.GetProductById(id);
             if (product == null)
             {
-                return NotFound();
+                return NotFound(); // Display a 404 page if the product doesn't exist
             }
-
             return View(product);
         }
 
-        // GET: Products/Create
+        [Route("products/create")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Product product)
+        [Route("products/store")]
+        public IActionResult Store(Product newProduct)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _productRepository.AddProduct(newProduct);
+                return RedirectToAction("Index");
             }
-            return View(product);
+            return View("Create", newProduct);
         }
 
-        // GET: Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [Route("products/edit/{id}")]
+        public IActionResult Edit(int id)
         {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products.FindAsync(id);
+            var product = _productRepository.GetProductById(id);
             if (product == null)
             {
-                return NotFound();
+                return NotFound(); // Display a 404 page if the product doesn't exist
             }
             return View(product);
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Product product)
+        [Route("products/update/{id}")]
+        public IActionResult Update(int id, Product updatedProduct)
         {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                var existingProduct = _productRepository.GetProductById(id);
+                if (existingProduct != null)
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    existingProduct.Name = updatedProduct.Name;
+                    // Update other properties as needed
+                    _productRepository.UpdateProduct(existingProduct);
+                    return RedirectToAction("Index");
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return NotFound(); // Display a 404 page if the product doesn't exist
             }
-            return View(product);
+            return View("Edit", updatedProduct);
         }
 
-        // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Route("products/delete/{id}")]
+        public IActionResult Delete(int id)
         {
-            if (id == null || _context.Products == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = _productRepository.GetProductById(id);
             if (product == null)
             {
-                return NotFound();
+                return NotFound(); // Display a 404 page if the product doesn't exist
             }
-
             return View(product);
         }
 
-        // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        [Route("products/destroy/{id}")]
+        public IActionResult Destroy(int id)
         {
-            if (_context.Products == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Products'  is null.");
-            }
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductExists(int id)
-        {
-          return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+            _productRepository.DeleteProduct(id);
+            return RedirectToAction("Index");
         }
     }
 }
