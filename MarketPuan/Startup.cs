@@ -24,6 +24,10 @@ namespace MarketPuan
                 options.UseNpgsql(dbConfig);
             });
 
+            // Repositories
+            services.AddScoped<IProductRepository, ProductRepository>();
+
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
