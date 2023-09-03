@@ -1,0 +1,36 @@
+﻿<style >
+/* Define styles for the layout elements */
+    .navbar {
+    /* Navbar styles go here */
+}
+
+    .logo {
+    /* Logo styles go here */
+}
+
+    .search-bar {
+    /* Search bar styles go here */
+}
+
+    .user-menu {
+    /* User menu styles go here */
+}
+
+    .sidebar {
+    /* Sidebar styles go here */
+}
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .sidebar li {
+        margin-bottom: 10px;
+    }
+
+    .content {
+    /* Content area styles go here */
+}
+
+</style >

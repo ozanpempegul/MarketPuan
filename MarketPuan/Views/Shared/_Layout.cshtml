@@ -7,33 +7,37 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MarketPuan.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="Styles/LayoutStyles.css" />
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MarketPuan</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    
+    <div class="navbar">
+        <div class="logo">
+            <img src="images/logo.png" alt="MarketPuan" />
+        </div>
+
+        <div class="search-bar">
+            <!-- Search input and button go here -->
+        </div>
+
+        <div class="user-menu">
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <ul>
+            <li><a href="/category/vegetables">Vegetables</a></li>
+            <li><a href="/category/water-and-drinks">Water and Drinks</a></li>
+            <li><a href="/category/bakery">Bakery</a></li>
+            <!-- Add more categories here -->
+        </ul>
+    </div>
+
+    <div class="content">
+        @RenderBody
     </div>
 
     <footer class="border-top footer text-muted">
